@@ -76,6 +76,13 @@ async function run(){
             // console.log(result)
             res.json(result);
           });
+
+          app.get('/reviews', async(req,res)=>{
+            const result=await reviewsCollection.find({}).toArray();
+            console.log(result)
+            res.send(result);
+  
+          })
         
         app.put('/users', async(req,res)=>{
           const user=req.body;
@@ -98,9 +105,25 @@ async function run(){
          app.post('/addUser', async(req,res)=>{
           const addUsers=req.body;
           const result=await addUserCollection.insertOne(addUsers);
-          console.log(result)
+          // console.log(result)
           res.json(result);
         });
+
+        app.get('/addUser', async(req,res)=>{
+          const result=await addUserCollection.find({}).toArray();
+          // console.log(result)
+          res.send(result);
+
+        });
+
+        app.get('/addUser/:email', async(req,res)=>{
+          const email=req.params.email;
+          const query = { email: { $regex: email } };
+          console.log(query)
+          const result = await addUserCollection.find(query).toArray();
+          console.log(result);
+          res.send(result);
+        })
 
      
 
