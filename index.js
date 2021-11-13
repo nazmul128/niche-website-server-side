@@ -1,9 +1,12 @@
 const express = require('express');
+const app = express()
 const cors=require('cors')
 const { MongoClient, Admin } = require('mongodb');
+const ObjectId = require("mongodb").ObjectId;
+
 require('dotenv').config()
  
-const app = express()
+
 const port = process.env.PORT ||5000
 
 //middleware
@@ -35,12 +38,20 @@ async function run(){
         })
 
 
-        //get products api
-        app.get('/products', async(req,res)=>{
+        // //get products api
+        // app.get('/products', async(req,res)=>{
+        //   const cursor = productsCollection.find({});
+        //   const products = await cursor.toArray();
+        //   res.send(products);
+        // });
+
+
+        // get all items from collection
+        app.get('/products', async (req, res) => {
           const cursor = productsCollection.find({});
-          const products = await cursor.toArray();
-          res.send(products);
-        });
+          const items = await cursor.toArray();
+          res.send(items);
+      });
 
 
         //get single product
@@ -59,6 +70,8 @@ async function run(){
           // console.log(result)
           res.json(result);
         });
+
+        
 
       
 
@@ -122,9 +135,27 @@ async function run(){
           const result = await addUserCollection.find(query).toArray();
           console.log(result);
           res.send(result);
-        })
+        });
 
-     
+        //  //delete single products
+        //  app.delete('/products/:id', async (req,res) => {
+        //   const id = req.params.id;
+        //   const query = {_id: ObjectId(id)};
+        //   console.log(query)
+        //   const result = await productsCollection.deleteOne(query);
+        //   console.log(result);
+        //   res.json(result);
+        // });
+
+        // delete product-item
+        app.delete('/products/:id', async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: ObjectId(id) };
+          const result = await productsCollection.deleteOne(query);
+          res.send(result);
+      })
+
+        
 
 
       }
