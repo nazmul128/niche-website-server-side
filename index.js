@@ -119,7 +119,6 @@ async function run(){
         app.get('/addUser/:email', async(req,res)=>{
           const email=req.params.email;
           const query = { email: { $regex: email } };
-          console.log(query)
           const result = await addUserCollection.find(query).toArray();
           console.log(result);
           res.send(result);
